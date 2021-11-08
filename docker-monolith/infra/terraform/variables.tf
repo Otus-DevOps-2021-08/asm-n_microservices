@@ -21,6 +21,11 @@ variable "docker_host_instances_to_create" {
   default     = 1
 }
 
+variable "docker_host_image_folder_id" {
+  description = "Folder ID to search image by family"
+  default     = "standard-images"
+}
+
 variable "docker_host_image_family" {
   description = "Image os family"
   default     = "ubuntu-2004-lts"

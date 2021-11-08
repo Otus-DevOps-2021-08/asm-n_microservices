@@ -1,0 +1,45 @@
+{
+  "variables":
+  {
+    "SA_KEY_FILE_PATH": "../secrets/packer1-service-acc-key.json",
+    "FOLDER_ID": "b1gifggpogsok6gs2m7c",
+    "SUBNET_ID": "e9bq4jkleiviuvtdhqs4",
+    "ZONE": "ru-central1-a",
+    "SRC_IMAGE_FAMILY": "ubuntu-2004-lts",
+    "DST_IMAGE_NAME": "docker-host",
+    "DST_IMAGE_FAMILY": "docker-host",
+    "DST_IMAGE_SIZE_GB": "10",
+    "SSH_USERNAME": "ubuntu"
+  },
+
+  "builders": [
+    {
+      "type": "yandex",
+      "service_account_key_file": "{{user `SA_KEY_FILE_PATH`}}",
+      "folder_id": "{{user `FOLDER_ID`}}",
+      "subnet_id": "{{user `SUBNET_ID`}}",
+      "zone": "{{user `ZONE`}}",
+      "source_image_family": "{{user `SRC_IMAGE_FAMILY`}}",
+      "image_name": "{{user `DST_IMAGE_NAME`}}-{{timestamp}}",
+      "image_family": "{{user `DST_IMAGE_FAMILY`}}",
+      "ssh_username": "{{user `SSH_USERNAME`}}",
+      "platform_id": "standard-v1",
+      "disk_size_gb": "{{user `DST_IMAGE_SIZE_GB`}}",
+      "use_ipv4_nat": "true"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "ansible",
+      "user": "{{user `SSH_USERNAME`}}",
+      "keep_inventory_file": false,
+      "playbook_file": "../ansible/playbooks/all.yml",
+      "groups": ["docker_hosts"],
+      "extra_arguments": [
+        "--tags", "install",
+        "--extra-vars", "{\"docker_users\":[\"{{user `SSH_USERNAME`}}\"]}"
+      ]
+    }
+  ]
+}

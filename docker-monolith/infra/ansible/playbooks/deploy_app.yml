@@ -12,17 +12,20 @@
       name: "pip"
       state: present
       update_cache: yes
+    tags: install
 
   - name: Install Python Docker SDK
     pip:
       name: "docker"
       state: "present"
+    tags: install
 
   - name: Pull app image
     docker_image:
       name: "{{ docker_app_image }}"
       state: present
       source: pull
+    tags: deploy
 
   - name: Run app
     docker_container:
@@ -32,3 +35,4 @@
       network_mode: host
       state: started
       auto_remove: yes
+    tags: deploy

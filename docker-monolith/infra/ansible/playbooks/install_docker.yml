@@ -14,17 +14,21 @@
       - "gnupg"
       - "lsb-release"
       state: present
+      update_cache: yes
+    tags: install
 
   - name: Add docker repo key
     apt_key:
       url: "https://download.docker.com/linux/ubuntu/gpg"
       state: present
+    tags: install
 
   - name: Add docker repo
     apt_repository:
       repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
       filename: "docker-ce"
       state: present
+    tags: install
 
   - name: Install docker engine
     apt:
@@ -34,6 +38,7 @@
       - "containerd.io"
       state: present
       update_cache: yes
+    tags: install
 
   - name: Add users to docker group
     user:
@@ -41,7 +46,9 @@
       groups: "docker"
       append: yes
     loop: "{{ docker_users }}"
+    tags: install
 
   - name: Relogin due user group changed
     meta:
       reset_connection
+    tags: install

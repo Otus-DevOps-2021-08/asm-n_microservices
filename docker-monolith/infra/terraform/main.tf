@@ -15,7 +15,8 @@ provider "yandex" {
 }
 
 data "yandex_compute_image" "docker_host_image" {
-  family = var.docker_host_image_family
+  family    = var.docker_host_image_family
+  folder_id = var.docker_host_image_folder_id
 }
 
 module "docker-host" {
