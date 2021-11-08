@@ -2,3 +2,5 @@
 
 docker_users:
 - "ubuntu"
+
+docker_app_image: "aaasm/otus-reddit:1.0"

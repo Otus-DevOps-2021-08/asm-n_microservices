@@ -1,0 +1,34 @@
+---
+
+- name: "Deploy app"
+  hosts: docker_hosts
+  become: no
+
+  tasks:
+
+  - name: Install pip
+    become: yes
+    apt:
+      name: "pip"
+      state: present
+      update_cache: yes
+
+  - name: Install Python Docker SDK
+    pip:
+      name: "docker"
+      state: "present"
+
+  - name: Pull app image
+    docker_image:
+      name: "{{ docker_app_image }}"
+      state: present
+      source: pull
+
+  - name: Run app
+    docker_container:
+      container_default_behavior: compatibility
+      image: "{{ docker_app_image }}"
+      name: "reddit"
+      network_mode: host
+      state: started
+      auto_remove: yes
