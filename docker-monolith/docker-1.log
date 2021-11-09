@@ -1,0 +1,9 @@
+REPOSITORY              TAG       IMAGE ID       CREATED          SIZE
+asm-n/ubuntu-tmp-file   latest    085bc028689e   42 seconds ago   63.1MB
+ubuntu                  18.04     5a214d77f5d7   5 weeks ago      63.1MB
+hello-world             latest    feb5d9fea6a5   6 weeks ago      13.3kB
+
+Контейнер -- запускаемый инстанс образа.
+Образ состоит из слоев ФС. Все слои только для чтения.
+Контейнер содержит все слои из образа + доп. слой с возможностью записи.
+К контейнеру можно подключить network и volumes.

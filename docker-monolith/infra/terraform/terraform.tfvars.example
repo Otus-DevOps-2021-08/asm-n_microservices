@@ -1,0 +1,13 @@
+service_account_key_file = "../secrets/terraform-service-key.json"
+cloud_id                 = "abc123"
+folder_id                = "abc123"
+subnet_id                = "abc123"
+zone                     = "ru-central1-a"
+
+docker_host_instances_to_create = 3
+docker_host_image_family        = "ubuntu-2004-lts"
+docker_host_image_folder_id     = "abc123"
+
+ssh_username         = "ubuntu"
+ssh_public_key_file  = "../secrets/ssh-key.pub"
+ssh_private_key_file = "../secrets/ssh-key"
