@@ -1,7 +1,8 @@
 #!/bin/bash -x
 
 docker network create reddit
-docker run -d --name=mongo --network=reddit \
+docker volume create reddit_db
+docker run -d --name=mongo --network=reddit -v reddit_db:/data/db \
     --network-alias=post_db_1 \
     --network-alias=comment_db_1 \
    mongo:latest
