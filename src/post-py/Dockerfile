@@ -1,7 +1,9 @@
 FROM python:3.6.0-alpine
 
-WORKDIR /app
-COPY . /app
+ARG APP_HOME=/app
+
+WORKDIR $APP_HOME
+COPY . $APP_HOME
 
 RUN apk --no-cache --update add build-base && \
     pip install --upgrade pip && \

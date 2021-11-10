@@ -12,9 +12,9 @@ docker run -d --name=post --network=reddit \
 docker run -d --name=comment --network=reddit \
     --network-alias=comment_1 \
     --env COMMENT_DATABASE_HOST=comment_db_1 \
-  aaasm/comment:1.0
+  aaasm/comment:2.0
 docker run -d --name=ui --network=reddit \
     -p 9292:9292 \
     --env POST_SERVICE_HOST=post_1 \
     --env COMMENT_SERVICE_HOST=comment_1 \
-  aaasm/ui:1.0
+  aaasm/ui:2.0
