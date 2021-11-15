@@ -1,8 +1,9 @@
 # asm-n_microservices
 asm-n microservices repository
 
-## ДЗ№14: ДЗ: Разбиение приложения на несколько микросервисов. Выбор базового образа. Подключение volume к контейнеру
+## ДЗ№15: Практика работы с основными типами Docker сетей. Декларативное описание Docker инфраструктуры при помощи Docker Compose
 
-- Созданы Dockerfiles для сервисов приложения.
-- Оптимизированы Dockefiles.
-- Создан volume для сервиса БД.
+- Создан docker-compose.yml для сборки и запуска сервисов приложения
+- Переменные для docker-compose вынесены с .env файл (см. .env.example)
+- В .env файле перемененная COMPOSE_PROJECT_NAME служит для задания имени проекта
+- Создан docker-compose.override.yml для разработки
