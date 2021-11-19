@@ -1,0 +1,7 @@
+service_account_key_file_path = "../secrets/terraform-service-key.json"
+cloud_id                      = "b1gga69nidr7kklae8a1"
+folder_id                     = "b1gifggpogsok6gs2m7c"
+subnet_id                     = "e9bq4jkleiviuvtdhqs4"
+zone                          = "ru-central1-a"
+username                      = "gitlab"
+ssh_public_key_file_path      = "../secrets/ssh-key.pub"
