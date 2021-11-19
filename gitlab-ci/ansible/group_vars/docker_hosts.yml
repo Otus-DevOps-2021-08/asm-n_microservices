@@ -1,0 +1,7 @@
+---
+
+docker_users:
+- "{{ gitlab_user }}"
+
+gitlab_user: "gitlab"
+gitlab_group: "gitlab"
