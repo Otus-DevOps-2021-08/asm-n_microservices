@@ -23,9 +23,7 @@ resource "yandex_compute_instance" "gitlab_ci_instance" {
   name        = "gitlab-ci-instance"
   platform_id = "standard-v1"
 
-  labels = {
-    group = "gitlab_hosts"
-  }
+  hostname = "gitlab-instance"
 
   resources {
     cores  = 2
@@ -45,6 +43,7 @@ resource "yandex_compute_instance" "gitlab_ci_instance" {
   }
 
   metadata = {
+    ansible_groups = "gitlab_hosts, gitlab_runners"
     user-data = "#cloud-config\nusers:\n  - name: ${var.username}\n    groups: sudo\n    shell: /bin/bash\n    sudo: ['ALL=(ALL) NOPASSWD:ALL']\n    ssh-authorized-keys:\n      - ${file(var.ssh_public_key_file_path)}"
   }
 }

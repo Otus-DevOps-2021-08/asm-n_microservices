@@ -9,7 +9,7 @@
     become: true
     ansible.builtin.file:
       path: "{{ item }}"
-      mode: "0755"
+      mode: "755"
       owner: "{{ gitlab_user }}"
       group: "{{ gitlab_group }}"
       state: "directory"

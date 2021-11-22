@@ -1,5 +1,4 @@
-default:
-  image: ruby:2.2
+image: ruby:2.4.2
 
 stages:
 - build
@@ -8,27 +7,44 @@ stages:
 - stage
 - production
 
-variables:
-  DATABASE_URL: 'mongodb://mongo/user_posts'
-
-before_script:
-- cd reddit
-- bundle install
-
-build_job:
-  stage: build
-  script:
-  - echo 'Building'
-
-test_unit_job:
+.old-test:
   stage: test
   services:
-  - "mongo:latest"
+  - mongo:latest
+  before_script:
+  - cd reddit
+  - bundle install
   script:
   - ruby simpletest.rb
 
-test_integration_job:
+.tests:
   stage: test
+  image: docker:20.10.11
+  services:
+  - mongo:latest
+
+variables:
+  DATABASE_URL: 'mongo:27017'
+
+build_job:
+  stage: build
+  image: docker:20.10.11
+  script:
+  - docker build
+      -f reddit/docker/Dockerfile
+      --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+      ./reddit
+
+test_unit_job:
+  extends: .tests
+  script:
+  - docker run --rm
+      --env DATABASE_URL=$DATABASE_URL
+      $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+      ruby /app/simpletest.rb
+
+test_integration_job:
+  extends: .tests
   script:
   - echo 'Testing 2'
 
@@ -42,14 +58,41 @@ deploy_dev_job:
 
 branch review:
   stage: review
-  script: echo "Deploy to $CI_ENVIRONMENT_SLUG"
+  image: docker:20.10.11
+  script:
+  - docker network create $CI_COMMIT_SHORT_SHA
+  - docker run --rm -d
+      --name mongo
+      --network $CI_COMMIT_SHORT_SHA
+      --network-alias mongo
+      mongo:latest
+  - docker run --rm -d
+      -p 9292:9292
+      --env DATABASE_URL=$DATABASE_URL
+      --name $CI_COMMIT_SHORT_SHA
+      --network $CI_COMMIT_SHORT_SHA
+      $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
   environment:
+    on_stop: stop branch review
+    action: start
     name: branch/$CI_COMMIT_REF_NAME
-    url: http://$CI_ENVIRONMENT_SLUG.example.com
+    url: http://$DEPLOY_HOST:9292/
   only:
     - branches
   except:
     - master
+
+stop branch review:
+  stage: review
+  image: docker:20.10.11
+  when: manual
+  script:
+  - docker kill $CI_COMMIT_SHORT_SHA
+  - docker kill mongo
+  - docker network rm $CI_COMMIT_SHORT_SHA
+  environment:
+    action: stop
+    name: branch/$CI_COMMIT_REF_NAME
 
 staging:
   stage: stage

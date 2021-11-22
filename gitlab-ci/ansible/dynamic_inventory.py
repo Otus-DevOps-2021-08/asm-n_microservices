@@ -38,14 +38,15 @@ def CreateInventoryGroup() -> dict:
   return inventoryGroup
 
 
-def AddHostToInventory(inventory: dict, hostname: str, ipAddr: str, group: str):
+def AddHostToInventory(inventory: dict, hostname: str, ipAddr: str, groups: list):
   if hostname not in inventory["_meta"]["hostvars"]:
     inventory["_meta"]["hostvars"][hostname] = dict()
   inventory["_meta"]["hostvars"][hostname]["ansible_host"] = ipAddr
 
-  if group not in inventory:
-    inventory[group] = CreateInventoryGroup()
-  inventory[group]["hosts"].append(hostname)
+  for group in groups:
+    if group not in inventory:
+      inventory[group] = CreateInventoryGroup()
+    inventory[group]["hosts"].append(hostname)
 
 
 def main():
@@ -62,7 +63,7 @@ def main():
         inventory,
         resource["values"]["name"],
         resource["values"]["network_interface"][0]["nat_ip_address"],
-        resource["values"]["labels"]["group"]
+        [group.strip() for group in resource["values"]["metadata"]["ansible_groups"].split(',')]
       )
 
   print(json.dumps(inventory))
