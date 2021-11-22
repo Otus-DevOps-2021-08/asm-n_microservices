@@ -1,10 +1,10 @@
 #!/bin/bash -x
 
-REG_TOKEN=dhDQqqNzJSxYQAiLDE2L
-GITLAB_URL=http://51.250.3.153
-GITLAB_RUNNERS=3
+REG_TOKEN=riexYKiwzcyznJusks33
+GITLAB_URL=http://51.250.1.71/
+GITLAB_RUNNERS=2
 
-RUNNER_HOST=51.250.3.153
+RUNNER_HOST=51.250.1.71
 USERNAME=gitlab
 SSH_PRIVATE_KEY_FILE=./secrets/ssh-key
 
@@ -17,6 +17,8 @@ for (( i=1; i<=${GITLAB_RUNNERS}; i++ )); do
       --name DockerRunner-${i} \
       --executor docker \
       --docker-image alpine:latest \
+      --docker-privileged \
+      --docker-volumes "/certs/client" \
       --registration-token ${REG_TOKEN} \
       --tag-list "linux,xenial,ubuntu,docker" \
       --run-untagged
