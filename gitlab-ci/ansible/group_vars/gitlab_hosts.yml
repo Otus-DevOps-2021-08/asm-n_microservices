@@ -5,3 +5,5 @@ docker_users:
 
 gitlab_user: "gitlab"
 gitlab_group: "gitlab"
+
+gitlab_runners_per_host: 3

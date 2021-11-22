@@ -1,27 +1,13 @@
 ---
 
 - name: Run GitLab-CE runner
-  hosts: docker_hosts
+  hosts: gitlab_hosts
 
   tasks:
 
-  - name: Create folders
-    become: yes
-    ansible.builtin.file:
-      path: "{{ item }}"
-      mode: "0755"
-      owner: "{{ gitlab_user }}"
-      group: "{{ gitlab_group }}"
-      state: "directory"
-    loop:
-    - "/srv/gitlab-runner/config"
-
-  - name: Run GitLab-CE runner
-    community.docker.docker_container:
-      name: gitlab-runner
-      image: "gitlab/gitlab-runner:latest"
-      state: "started"
-      restart_policy: "always"
-      volumes:
-      - "/srv/gitlab-runner/config:/etc/gitlab-runner"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+  - name: Test Run
+    ansible.builtin.include_tasks:
+      file: "run_gitlab_runner_inner.yml"
+    loop: "{{ query('ansible.builtin.sequence', 'start=1 end={{ gitlab_runners_per_host }}') }}"
+    loop_control:
+      loop_var: "outer_item"

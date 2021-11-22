@@ -24,12 +24,12 @@ resource "yandex_compute_instance" "gitlab_ci_instance" {
   platform_id = "standard-v1"
 
   labels = {
-    group = "docker_hosts"
+    group = "gitlab_hosts"
   }
 
   resources {
     cores  = 2
-    memory = 4
+    memory = 8
   }
 
   boot_disk {

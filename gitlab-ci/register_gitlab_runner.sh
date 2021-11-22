@@ -1,18 +1,23 @@
 #!/bin/bash -x
 
-REG_TOKEN=
-VM_IP_ADDRESS=51.250.12.114
-USERNAME=gitlab
-SSH_PRIVATE_KEY_FILE=../secrets/ssh-key
+REG_TOKEN=dhDQqqNzJSxYQAiLDE2L
+GITLAB_URL=http://51.250.3.153
+GITLAB_RUNNERS=3
 
-ssh -i ${SSH_PRIVATE_KEY_FILE} ${USERNAME}@${VM_IP_ADDRESS} \
-  docker exec -it gitlab-runner gitlab-runner register \
-    --url http://${VM_IP_ADDRESS}/ \
-    --non-interactive \
-    --locked=false \
-    --name DockerRunner \
-    --executor docker \
-    --docker-image alpine:latest \
-    --registration-token ${REG_TOKEN} \
-    --tag-list "linux,xenial,ubuntu,docker" \
-    --run-untagged
+RUNNER_HOST=51.250.3.153
+USERNAME=gitlab
+SSH_PRIVATE_KEY_FILE=./secrets/ssh-key
+
+for (( i=1; i<=${GITLAB_RUNNERS}; i++ )); do
+  ssh -i ${SSH_PRIVATE_KEY_FILE} ${USERNAME}@${RUNNER_HOST} \
+    docker run --rm -v /srv/gitlab-runner-${i}/config:/etc/gitlab-runner gitlab/gitlab-runner register \
+      --url ${GITLAB_URL} \
+      --non-interactive \
+      --locked=false \
+      --name DockerRunner-${i} \
+      --executor docker \
+      --docker-image alpine:latest \
+      --registration-token ${REG_TOKEN} \
+      --tag-list "linux,xenial,ubuntu,docker" \
+      --run-untagged
+done

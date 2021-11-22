@@ -1,0 +1,48 @@
+---
+
+#  - name: Create folders
+#    become: yes
+#    ansible.builtin.file:
+#      path: "{{ item }}"
+#      mode: "0755"
+#      owner: "{{ gitlab_user }}"
+#      group: "{{ gitlab_group }}"
+#      state: "directory"
+#    loop:
+#    - "/srv/gitlab-runner/config"
+
+- name: Create folders
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: "0755"
+    owner: "{{ gitlab_user }}"
+    group: "{{ gitlab_group }}"
+    state: "directory"
+  loop:
+  - "/srv/gitlab-runner-{{ outer_item }}/config"
+
+#  - name: Test Create folders
+#    ansible.builtin.debug:
+#      msg: "{{ item }}"
+#    loop: "{{ query('ansible.builtin.sequence', 'start=1 end={{ gitlab_runners_per_host }}') }}"
+
+#  - name: Test Create Dirs
+#    ansible.builtin.debug:
+#      msg: "Outer: {{ outer_item }}; Inner: {{ item }}"
+#    loop:
+#    - "/srv/gitlab-runner/config"
+
+#  - name: Test Run
+#    ansible.builtin.debug:
+#      msg: "Outer: {{ outer_item }}"
+
+- name: Run GitLab-CE runner
+  community.docker.docker_container:
+    name: "gitlab-runner-{{ outer_item }}"
+    image: "gitlab/gitlab-runner:latest"
+    state: "started"
+    restart_policy: "always"
+    volumes:
+    - "/srv/gitlab-runner-{{ outer_item }}/config:/etc/gitlab-runner"
+    - "/var/run/docker.sock:/var/run/docker.sock"
