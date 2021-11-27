@@ -1,9 +1,17 @@
 # asm-n_microservices
 asm-n microservices repository
 
-## ДЗ№15: Практика работы с основными типами Docker сетей. Декларативное описание Docker инфраструктуры при помощи Docker Compose
+## ДЗ№16: Gitlab CI. Построение процесса непрерывной интеграции
 
-- Создан docker-compose.yml для сборки и запуска сервисов приложения
-- Переменные для docker-compose вынесены с .env файл (см. .env.example)
-- В .env файле перемененная COMPOSE_PROJECT_NAME служит для задания имени проекта
-- Создан docker-compose.override.yml для разработки
+- Создана конфигурация terraform для запуска вм
+- Созданы плейбуки ansible развертывания GitLab CI и GitLab runner
+- Создан пайплайн в GitLab CI для сборки, тестирования и деплоя приложения
+
+Для запуска:
+
+- cd terraform && terraform apply -auto-approve
+- cd ansible && ansible-playbook -i dynamic_inventory.py playbooks/all.yml
+- vim register_gitlab_runner.sh && ./register_gitlab_runner.sh
+- project -> settings -> variables:
+  CI_REGISTRY_IMAGE my-app
+  DEPLOY_HOST x.x.x.x
