@@ -1,0 +1,22 @@
+---
+
+- name: Create folders
+  become: yes
+  ansible.builtin.file:
+    path: "{{ item }}"
+    mode: "755"
+    owner: "{{ gitlab_user }}"
+    group: "{{ gitlab_group }}"
+    state: "directory"
+  loop:
+  - "/srv/gitlab-runner-{{ outer_item }}/config"
+
+- name: Run GitLab-CE runner
+  community.docker.docker_container:
+    name: "gitlab-runner-{{ outer_item }}"
+    image: "gitlab/gitlab-runner:latest"
+    state: "started"
+    restart_policy: "always"
+    volumes:
+    - "/srv/gitlab-runner-{{ outer_item }}/config:/etc/gitlab-runner"
+    - "/var/run/docker.sock:/var/run/docker.sock"

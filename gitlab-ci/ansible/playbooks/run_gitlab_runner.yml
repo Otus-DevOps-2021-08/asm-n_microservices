@@ -1,0 +1,13 @@
+---
+
+- name: Run GitLab-CE runner
+  hosts: gitlab_runners
+
+  tasks:
+
+  - name: Install Runners
+    ansible.builtin.include_tasks:
+      file: "run_gitlab_runner_inner.yml"
+    loop: "{{ query('ansible.builtin.sequence', 'start=1 end={{ gitlab_runners_per_host }}') }}"
+    loop_control:
+      loop_var: "outer_item"
