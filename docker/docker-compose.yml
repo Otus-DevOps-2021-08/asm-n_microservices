@@ -64,6 +64,13 @@ services:
     - back_net
     command:
     - '--mongodb.uri=mongodb://post_db:27017'
+  blackbox-exporter:
+    image: ${USERNAME}/blackbox-exporter:${BLACKBOX_EXPORTER_VERSION}
+    networks:
+    - front_net
+    - back_net
+    command:
+    - '--config.file=/etc/blackbox.yml'
 
 volumes:
   post_db:
