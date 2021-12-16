@@ -5,6 +5,7 @@ VM_NAME=docker-host
 yc compute instance create \
   --name ${VM_NAME} \
   --zone ru-central1-a \
+  --memory 4 \
   --network-interface subnet-name=default-ru-central1-a,nat-ip-version=ipv4 \
   --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-1804-lts,size=15 \
   --ssh-key ~/.ssh/id_rsa.pub > /dev/null 2>&1
