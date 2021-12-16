@@ -5,7 +5,8 @@ SUBDIRS = src/comment \
 					src/post-py \
 					src/ui \
 					monitoring/blackbox-exporter \
-					monitoring/prometheus
+					monitoring/prometheus \
+					logging/fluentd
 
 .PHONY: all build push clean $(SUBDIRS)
 

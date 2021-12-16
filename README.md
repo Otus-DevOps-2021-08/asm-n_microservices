@@ -1,20 +1,14 @@
 # asm-n_microservices
 asm-n microservices repository
 
-## ДЗ№17: Создание и запуск системы мониторинга Prometheus
+## ДЗ№18: Логирование приложений
 
-- Создан образ prometheus
-- Создан образ blackbox-exporter
-- Добавлены экспортеры в prometheus:
-  - prom/node-exporter
-  - percona/mongodb_exporter
-  - prom/blackbox-exporter
-- Добавлены сервисы в docker-compose.yml:
-  - prometheus
-  - node-exporter
-  - mongodb-exporter
-  - blackbox-exporter
-- Созданы Makefile для сборки образов
+- Подготовка окружения
+- Логирование Docker-контейнеров
+- Сбор неструктурированных логов
+- Визуализация логов
+- Сбор структурированных логов
+- Распределенный трейсинг
 
 Для запуска:
 
@@ -24,5 +18,5 @@ asm-n microservices repository
   ```
 - Запустить
   ```
-  cd docker && docker-compose up -d
+  cd docker && docker-compose -f docker-compose.yml -f docker-compose-logging.yml up -d
   ```
