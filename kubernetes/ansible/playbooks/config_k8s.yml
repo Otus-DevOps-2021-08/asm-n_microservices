@@ -1,0 +1,99 @@
+---
+
+- name: Init k8s control-plane
+  hosts:
+  - k8s_control_nodes[0]
+  vars:
+    k8s_conf: "/etc/kubernetes/admin.conf"
+    k8s_pod_cidr: "10.244.0.0/16"
+  become: yes
+
+  tasks:
+
+  - name: Init cluster
+    ansible.builtin.shell:
+      cmd: |
+        kubeadm init \
+          --apiserver-cert-extra-sans={{ ansible_host }} \
+          --apiserver-advertise-address=0.0.0.0 \
+          --control-plane-endpoint={{ ansible_host }} \
+          --pod-network-cidr={{ k8s_pod_cidr }} \
+          2>&1 >> ~/cluster_initialized.txt
+      creates: ~/cluster_initialized.txt
+
+  - name: Join token
+    ansible.builtin.shell:
+      cmd: kubeadm token create --print-join-command
+    register: k8s_join_command
+
+  - name: Kubeadm-certs
+    ansible.builtin.shell:
+      cmd: kubeadm init phase upload-certs --upload-certs
+    register: k8s_upload_certs
+
+  - name: Install Calico networking
+    ansible.builtin.shell:
+      cmd: |
+        KUBECONFIG={{ k8s_conf }} \
+        kubectl apply \
+          -f https://docs.projectcalico.org/manifests/calico.yaml \
+          2>&1 >> ~/pod_network_initialized.txt
+      creates: ~/pod_network_initialized.txt
+
+- name: Join k8s control-nodes
+  hosts:
+  - k8s_control_nodes[1:]
+  become: yes
+
+  tasks:
+
+  - name: Join cluster
+    ansible.builtin.shell:
+      cmd: |
+        {{ hostvars[groups['k8s_control_nodes'][0]]['k8s_join_command']['stdout'] }} \
+        --control-plane \
+        --certificate-key {{ hostvars[groups['k8s_control_nodes'][0]]['k8s_upload_certs']['stdout_lines'][2] }} \
+        2>&1 >> ~/cluster_joined.txt
+      creates: ~/cluster_joined.txt
+
+- name: Config k8s control-plane
+  hosts:
+  - k8s_control_nodes
+  vars:
+    k8s_conf: "/etc/kubernetes/admin.conf"
+    k8s_users:
+    - ubuntu
+  become: yes
+
+  tasks:
+
+  - name: Create .kube dir
+    ansible.builtin.file:
+      path: "/home/{{ item }}/.kube"
+      state: directory
+      mode: 0700
+      owner: "{{ item }}"
+    loop: "{{ k8s_users }}"
+
+  - name: "Copy {{ k8s_conf }}"
+    ansible.builtin.copy:
+      dest: "/home/{{ item }}/.kube/config"
+      src: "{{ k8s_conf }}"
+      remote_src: yes
+      mode: 0400
+      owner: "{{ item }}"
+    loop: "{{ k8s_users }}"
+
+- name: Join worker nodes
+  hosts:
+  - k8s_worker_nodes
+  become: yes
+
+  tasks:
+
+  - name: Join worker nodes
+    ansible.builtin.shell:
+      cmd: |
+        {{ hostvars[groups['k8s_control_nodes'][0]]['k8s_join_command']['stdout'] }}
+        2>&1 >> ~/cluster_joined.txt
+      creates: ~/cluster_joined.txt

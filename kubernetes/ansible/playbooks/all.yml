@@ -1,0 +1,5 @@
+---
+
+- ansible.builtin.import_playbook: "install_docker.yml"
+- ansible.builtin.import_playbook: "install_k8s.yml"
+- ansible.builtin.import_playbook: "config_k8s.yml"
