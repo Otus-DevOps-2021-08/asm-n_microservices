@@ -1,22 +1,14 @@
 # asm-n_microservices
 asm-n microservices repository
 
-## ДЗ№18: Логирование приложений
+## ДЗ№19: Установка и настройка Kubernetes
 
-- Подготовка окружения
-- Логирование Docker-контейнеров
-- Сбор неструктурированных логов
-- Визуализация логов
-- Сбор структурированных логов
-- Распределенный трейсинг
+- Разобрать на практике все компоненты Kubernetes, развернуть их вручную используя kubeadm
+- Ознакомиться с описанием основных примитивов нашего приложения и его дальнейшим запуском в Kubernetes
 
 Для запуска:
 
-- Собрать образы
-  ```
-  make
-  ```
-- Запустить
-  ```
-  cd docker && docker-compose -f docker-compose.yml -f docker-compose-logging.yml up -d
-  ```
+``` bash
+cd kubernetes/terraform/ && terraform apply && cd ../../
+cd kubernetes/ansible/ && ansible-playbook playbooks/all.yml && cd ../../
+```
