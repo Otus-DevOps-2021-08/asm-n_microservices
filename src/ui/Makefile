@@ -3,7 +3,7 @@ include ../../Makefile.inc
 
 REPOSITORY = aaasm
 NAME = ui
-VERSION = logging
+VERSION = 1.0
 DOCKERFILE = Dockerfile.2
 
 .PHONY: pre-build

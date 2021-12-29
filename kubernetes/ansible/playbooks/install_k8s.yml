@@ -1,0 +1,40 @@
+---
+
+- name: Install kubelet, kubeadm, kubectl
+  hosts:
+  - k8s_control_nodes
+  - k8s_worker_nodes
+  vars:
+    k8s_version: "1.19.16-00"
+  become: yes
+
+  tasks:
+
+  - name: Update packages
+    ansible.builtin.apt:
+      name:
+      - "apt-transport-https"
+      - "ca-certificates"
+      - "curl"
+      state: present
+      update_cache: yes
+
+  - name: Add k8s repo key
+    ansible.builtin.apt_key:
+      url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+      state: present
+
+  - name: Add k8s repo
+    ansible.builtin.apt_repository:
+      repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+      filename: "kubernetes"
+      state: present
+
+  - name: Install
+    ansible.builtin.apt:
+      name:
+      - "kubelet={{ k8s_version }}"
+      - "kubeadm={{ k8s_version }}"
+      - "kubectl={{ k8s_version }}"
+      state: present
+      update_cache: yes
