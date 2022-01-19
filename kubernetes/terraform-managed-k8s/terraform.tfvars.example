@@ -1,0 +1,12 @@
+service_account_key_file_path = "../secrets/terraform-service-key.json"
+cloud_id                      = "b1gga69nidr7kklae8a1"
+folder_id                     = "b1gifggpogsok6gs2m7c"
+network_id                    = "enp2nsc7enspfm2d7n2a"
+subnet_id                     = "e9bq4jkleiviuvtdhqs4"
+zone                          = "ru-central1-a"
+k8s_version                   = "1.19"
+k8s_service_account_id        = "ajetssojdpm20ocbb44a"
+k8s_node_service_account_id   = "ajetssojdpm20ocbb44a"
+k8s_nodes_count               = 2
+k8s_username                  = "ubuntu"
+k8s_ssh_public_key_file_path  = "~/.ssh/id_rsa.pub"
