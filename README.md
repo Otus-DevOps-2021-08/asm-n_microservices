@@ -1,14 +1,16 @@
 # asm-n_microservices
 asm-n microservices repository
 
-## ДЗ№19: Установка и настройка Kubernetes
+## ДЗ№20: Основные модели безопасности и контроллеры в Kubernetes
 
-- Разобрать на практике все компоненты Kubernetes, развернуть их вручную используя kubeadm
-- Ознакомиться с описанием основных примитивов нашего приложения и его дальнейшим запуском в Kubernetes
+- Развернуть локальное окружение для работы с Kubernetes
+- Развернуть Kubernetes в Yandex Cloud
+- Запустить reddit в Kubernetes
 
 Для запуска:
 
 ``` bash
-cd kubernetes/terraform/ && terraform apply && cd ../../
-cd kubernetes/ansible/ && ansible-playbook playbooks/all.yml && cd ../../
+cd kubernetes/terraform-managed-k8s/ && terraform apply && cd ../../
+kubectl apply -f kubernetes/reddit/dev-namespace.yml
+kubectl apply -n dev -f kubernetes/reddit/
 ```
