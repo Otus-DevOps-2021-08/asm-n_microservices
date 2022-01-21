@@ -1,0 +1,12 @@
+variable "service_account_key_file_path" {}
+variable "cloud_id" {}
+variable "folder_id" {}
+variable "network_id" {}
+variable "subnet_id" {}
+variable "zone" {}
+variable "k8s_version" {}
+variable "k8s_service_account_id" {}
+variable "k8s_node_service_account_id" {}
+variable "k8s_nodes_count" {}
+variable "k8s_username" {}
+variable "k8s_ssh_public_key_file_path" {}
