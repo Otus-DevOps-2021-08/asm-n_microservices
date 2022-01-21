@@ -34,6 +34,8 @@ resource "yandex_kubernetes_cluster" "reddit_k8s" {
   node_service_account_id = var.k8s_service_account_id
 
   release_channel = "RAPID"
+
+  network_policy_provider = "CALICO"
 }
 
 resource "yandex_kubernetes_node_group" "reddit_k8s_node_group_01" {
