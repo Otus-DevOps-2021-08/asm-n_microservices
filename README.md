@@ -1,11 +1,16 @@
 # asm-n_microservices
 asm-n microservices repository
 
-## ДЗ№20: Основные модели безопасности и контроллеры в Kubernetes
+## ДЗ№21: Ingress-контроллеры и сервисы в Kubernetes
 
-- Развернуть локальное окружение для работы с Kubernetes
-- Развернуть Kubernetes в Yandex Cloud
-- Запустить reddit в Kubernetes
+- Ingress Controller
+- Ingress
+- Secret
+- TLS
+- LoadBalancer Service
+- Network Policies
+- PersistentVolumes
+- PersistentVolumeClaims
 
 Для запуска:
 
@@ -13,4 +18,5 @@ asm-n microservices repository
 cd kubernetes/terraform-managed-k8s/ && terraform apply && cd ../../
 kubectl apply -f kubernetes/reddit/dev-namespace.yml
 kubectl apply -n dev -f kubernetes/reddit/
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml
 ```
